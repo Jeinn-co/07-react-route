@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { usersLoader } from './loaders/users';
+import { userLoader } from './loaders/user';
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const PageHome = lazy(() => import('./routes/index.jsx'));
+const EditorialIndex = lazy(() => import('./routes/editorial/index.jsx'));
+const EditorialArticles = lazy(() => import('./routes/editorial/articles.jsx'));
+const UserProfile = lazy(() => import('./routes/editorial/user.jsx'));
+
+const router = createBrowserRouter([
+  {
+    index: true,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <PageHome />
+      </Suspense>
+    ),
+  },
+  {
+    path: 'editorial',
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <EditorialIndex />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'articles',
+        children: [
+          {
+            index: true,
+            loader: usersLoader,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <EditorialArticles />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'user/:id',
+            loader: userLoader,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <UserProfile />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+    ],
+  },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App
