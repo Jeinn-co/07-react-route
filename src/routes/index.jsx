@@ -11,7 +11,7 @@ export default function PageHome() {
 
   return (
     <div>
-      <h1>Home - {location.pathname}</h1>
+      <h2>Home - {location.pathname}</h2>
       <p>Match Editorial: {match ? 'Yes' : 'No'}</p>
       <button onClick={handleFilter}>Filter: {searchParams.get('q')}</button>
       <button onClick={goToArticles}>Go to Articles</button>

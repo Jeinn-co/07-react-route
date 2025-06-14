@@ -14,12 +14,16 @@ export default function UserList() {
 
   return (
     <div>
-      <h1>Users - {location.pathname}</h1>
-      {safeUsers.map((user) => (
-        <Link key={user.id} to={`/editorial/articles/user/${user.id}`}>
-          {user.name}
-        </Link>
-      ))}
+      <h2>Users - {location.pathname}</h2>
+      <ul>
+        {safeUsers.map((user) => (
+          <li key={user.id}>
+            <Link to={`/editorial/articles/user/${user.id}`}>
+              {user.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
       <p>Is User Route: {isUserRoute ? 'Yes' : 'No'}</p>
     </div>
   );

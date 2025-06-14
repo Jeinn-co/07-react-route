@@ -9,7 +9,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <h1>User: {user.name} (ID: {id})</h1>
+      <h2>User: {user.name} (ID: {id})</h2>
       <button onClick={goToPosts}>View Posts</button>
       <p>Breadcrumbs: {matches.map((m) => m.pathname).join(' > ')}</p>
     </div>
