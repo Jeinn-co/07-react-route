@@ -26,7 +26,6 @@ export default function UserList() {
           </li>
         ))}
       </ul>
-      <p>Is User Route: {isUserRoute ? 'Yes' : 'No'}</p>
     </div>
   );
 }
