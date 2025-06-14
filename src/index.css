@@ -66,3 +66,11 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.breadcrumb {
+  background-color: #e0e0e0; /* 淡灰色 */
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 10px; /* 與下方按鈕保持間距 */
+  color: black;
+}

@@ -1,9 +1,10 @@
-import { useLoaderData, useLocation, matchPath, Link } from 'react-router-dom';
+import { useLoaderData, useLocation, matchPath, Link, useNavigate } from 'react-router-dom';
 
 export default function UserList() {
   const users = useLoaderData();
   const location = useLocation();
   const isUserRoute = matchPath('/user/:id', location.pathname);
+  const navigate = useNavigate();
 
   // Ensure users is always an array before calling map
   const safeUsers = Array.isArray(users) ? users : [];
@@ -14,6 +15,7 @@ export default function UserList() {
 
   return (
     <div>
+      <button onClick={() => navigate(-1)}>Back</button>
       <h2>Users - {location.pathname}</h2>
       <ul>
         {safeUsers.map((user) => (
