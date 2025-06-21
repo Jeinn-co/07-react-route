@@ -1,5 +1,5 @@
-import { useLoaderData, useNavigate } from 'react-router-dom';
-import { List } from 'antd';
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { List } from "antd";
 
 export default function UserList() {
   const users = useLoaderData();
@@ -15,11 +15,13 @@ export default function UserList() {
       renderItem={(user) => (
         <List.Item>
           <List.Item.Meta
-            title={<a onClick={() => navigate(`/users/${user.id}`)}>{user.name}</a>}
+            title={
+              <a onClick={() => navigate(`/users/${user.id}`)}>{user.name}</a>
+            }
             description={user.email}
           />
         </List.Item>
       )}
     />
   );
-} 
+}

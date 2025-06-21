@@ -1,5 +1,5 @@
-import { useLoaderData, useNavigate } from 'react-router-dom';
-import { Card, Button, Typography } from 'antd';
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { Card, Button, Typography } from "antd";
 
 const { Title, Paragraph } = Typography;
 
@@ -13,7 +13,7 @@ export default function PostDetail() {
 
   return (
     <div>
-      <Button onClick={() => navigate('/posts')} style={{ marginBottom: 16 }}>
+      <Button onClick={() => navigate("/posts")} style={{ marginBottom: 16 }}>
         Back to List
       </Button>
 
@@ -23,4 +23,4 @@ export default function PostDetail() {
       </Card>
     </div>
   );
-} 
+}

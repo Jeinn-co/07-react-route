@@ -1,4 +1,4 @@
-import { Typography } from 'antd';
+import { Typography } from "antd";
 
 const { Title } = Typography;
 
@@ -9,4 +9,4 @@ export default function PageHome() {
       <p>This is the main home page.</p>
     </div>
   );
-} 
+}

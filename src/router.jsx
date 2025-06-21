@@ -1,70 +1,92 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-import MainLayout from './layouts/MainLayout.jsx';
+import { createBrowserRouter } from "react-router-dom";
+import { lazy } from "react";
+import MainLayout from "./layouts/MainLayout.jsx";
+import SuspenseWrapper from "./components/SuspenseWrapper.jsx";
 
 // Loaders
-import { usersLoader } from './loaders/users.jsx';
-import { userLoader } from './loaders/user.jsx';
-import { allPostsLoader } from './loaders/allPosts.jsx';
-import { postLoader } from './loaders/post.jsx';
+import { usersLoader } from "./loaders/users.jsx";
+import { userLoader } from "./loaders/user.jsx";
+import { allPostsLoader } from "./loaders/allPosts.jsx";
+import { postLoader } from "./loaders/post.jsx";
 
 // Page Components (Lazy Loaded)
-const PageHome = lazy(() => import('./routes/home/index.jsx'));
-const PageDashboard = lazy(() => import('./routes/home/dashboard.jsx'));
-const UserList = lazy(() => import('./routes/users/index.jsx'));
-const UserProfile = lazy(() => import('./routes/users/user.jsx'));
-const PostList = lazy(() => import('./routes/posts/index.jsx'));
-const PostDetail = lazy(() => import('./routes/posts/post.jsx'));
-
-// Helper for Suspense
-const SuspenseWrapper = ({ children }) => <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>;
+const PageHome = lazy(() => import("./pages/home/index.jsx"));
+const PageDashboard = lazy(() => import("./pages/home/dashboard.jsx"));
+const UserList = lazy(() => import("./pages/users/index.jsx"));
+const UserProfile = lazy(() => import("./pages/users/user.jsx"));
+const PostList = lazy(() => import("./pages/posts/index.jsx"));
+const PostDetail = lazy(() => import("./pages/posts/post.jsx"));
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <MainLayout />,
     children: [
       {
         index: true,
-        handle: { crumb: 'Home' },
-        element: <SuspenseWrapper><PageHome /></SuspenseWrapper>,
+        handle: { crumb: "Home" },
+        element: (
+          <SuspenseWrapper>
+            <PageHome />
+          </SuspenseWrapper>
+        ),
       },
       {
-        path: 'dashboard',
-        handle: { crumb: 'Dashboard' },
-        element: <SuspenseWrapper><PageDashboard /></SuspenseWrapper>,
+        path: "dashboard",
+        handle: { crumb: "Dashboard" },
+        element: (
+          <SuspenseWrapper>
+            <PageDashboard />
+          </SuspenseWrapper>
+        ),
       },
       {
-        path: 'users',
-        handle: { crumb: 'Users' },
+        path: "users",
+        handle: { crumb: "Users" },
         children: [
           {
             index: true,
             loader: usersLoader,
-            element: <SuspenseWrapper><UserList /></SuspenseWrapper>,
+            element: (
+              <SuspenseWrapper>
+                <UserList />
+              </SuspenseWrapper>
+            ),
           },
           {
-            path: ':id',
+            path: ":id",
             loader: userLoader,
-            handle: { crumb: (data) => data?.name || 'User Detail' },
-            element: <SuspenseWrapper><UserProfile /></SuspenseWrapper>,
+            handle: { crumb: (data) => data?.name || "User Detail" },
+            element: (
+              <SuspenseWrapper>
+                <UserProfile />
+              </SuspenseWrapper>
+            ),
           },
         ],
       },
       {
-        path: 'posts',
-        handle: { crumb: 'Posts' },
+        path: "posts",
+        handle: { crumb: "Posts" },
         children: [
           {
             index: true,
             loader: allPostsLoader,
-            element: <SuspenseWrapper><PostList /></SuspenseWrapper>,
+            element: (
+              <SuspenseWrapper>
+                <PostList />
+              </SuspenseWrapper>
+            ),
           },
           {
-            path: ':id',
+            path: ":id",
             loader: postLoader,
-            handle: { crumb: (data) => data?.title || 'Post Detail' },
-            element: <SuspenseWrapper><PostDetail /></SuspenseWrapper>,
+            handle: { crumb: (data) => data?.title || "Post Detail" },
+            element: (
+              <SuspenseWrapper>
+                <PostDetail />
+              </SuspenseWrapper>
+            ),
           },
         ],
       },
@@ -72,4 +94,4 @@ const router = createBrowserRouter([
   },
 ]);
 
-export default router; 
+export default router;
