@@ -1,28 +1,29 @@
-import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import { Card, Button, List } from 'antd';
 
 export default function UserPosts() {
   const posts = useLoaderData();
   const navigate = useNavigate();
-  const { id } = useParams();
-
-  // Ensure posts is always an array before calling map
-  const safePosts = Array.isArray(posts) ? posts : [];
-
-  const firstPost = safePosts[0];
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>Back</button>
-      <h3>Posts for User: {id}</h3>
-      <p>這是顯示用戶 {id} 的所有貼文的頁面。</p>
-      {firstPost ? (
-        <div>
-          <h4>{firstPost.title}</h4>
-          <p>{firstPost.body}</p>
-        </div>
-      ) : (
-        <p>No posts found for this user.</p>
-      )}
-    </div>
+    <Card title="User Posts">
+       <Button onClick={() => navigate(-1)} style={{ marginBottom: 16 }}>
+        Back to User
+      </Button>
+      <List
+        itemLayout="vertical"
+        dataSource={posts}
+        renderItem={post => (
+          <List.Item
+            key={post.id}
+          >
+            <List.Item.Meta
+              title={post.title}
+              description={post.body}
+            />
+          </List.Item>
+        )}
+      />
+    </Card>
   );
 } 
