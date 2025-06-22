@@ -1,6 +1,4 @@
 export async function userLoader({ params }) {
-  const res = await fetch(
-    `https://jsonplaceholder.typicode.com/users/${params.id}`,
-  );
+  const res = await fetch(`/api/users/${params.id}`);
   return res.json();
 }

@@ -16,6 +16,8 @@ const UserList = lazy(() => import("./pages/users/index.jsx"));
 const UserProfile = lazy(() => import("./pages/users/user.jsx"));
 const PostList = lazy(() => import("./pages/posts/index.jsx"));
 const PostDetail = lazy(() => import("./pages/posts/post.jsx"));
+const UserEditPage = lazy(() => import("./pages/users/edit.jsx"));
+const UserCreatePage = lazy(() => import("./pages/users/create.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -60,6 +62,24 @@ const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <UserProfile />
+              </SuspenseWrapper>
+            ),
+          },
+          {
+            path: ":id/edit",
+            loader: userLoader,
+            handle: { crumb: (data) => `編輯 ${data?.name || ""}` },
+            element: (
+              <SuspenseWrapper>
+                <UserEditPage />
+              </SuspenseWrapper>
+            ),
+          },
+          {
+            path: "new",
+            element: (
+              <SuspenseWrapper>
+                <UserCreatePage />
               </SuspenseWrapper>
             ),
           },
