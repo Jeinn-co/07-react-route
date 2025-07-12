@@ -4,8 +4,6 @@ import PageLayout from "./layouts/PageLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 
 // Loaders
-import { usersLoader } from "./loaders/users.jsx";
-import { userLoader } from "./loaders/user.jsx";
 import { allPostsLoader } from "./loaders/allPosts.jsx";
 import { postLoader } from "./loaders/post.jsx";
 

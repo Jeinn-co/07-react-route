@@ -1,11 +1,13 @@
-import { useNavigate, useRevalidator } from "react-router-dom";
-import { Button, Card, Form, Input } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Button, Card, Form, Input, message } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useCreateUser } from "../../hooks/useUsers";
 
 export default function UserCreatePage() {
   const navigate = useNavigate();
-  const revalidator = useRevalidator();
+  const createUserMutation = useCreateUser();
+  
   const {
     control,
     handleSubmit,
@@ -22,13 +24,14 @@ export default function UserCreatePage() {
   });
 
   const onSubmit = async (data) => {
-    await fetch("/api/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    revalidator.revalidate();
-    navigate("/users");
+    try {
+      await createUserMutation.mutateAsync(data);
+      message.success("新增成功");
+      navigate("/users");
+    } catch (error) {
+      message.error("新增失敗");
+      console.error("Create error:", error);
+    }
   };
 
   return (
@@ -88,7 +91,12 @@ export default function UserCreatePage() {
           />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" type="primary" style={{ marginRight: 8 }}>
+          <Button 
+            htmlType="submit" 
+            type="primary" 
+            style={{ marginRight: 8 }}
+            loading={createUserMutation.isPending}
+          >
             新增
           </Button>
           <Button onClick={() => navigate("/users")}>取消</Button>

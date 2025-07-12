@@ -29,7 +29,9 @@ export const handlers = [
   }),
   http.delete("/api/users/:id", ({ params }) => {
     const { id } = params;
-    db.users.delete(Number(id));
+    console.log('[MSW] Handling DELETE /api/users/:id', { id, numericId: Number(id) });
+    const result = db.users.delete(Number(id));
+    console.log('[MSW] DELETE result:', result);
     return new HttpResponse(null, { status: 204 });
   }),
   http.get("/api/users/:id", ({ params }) => {

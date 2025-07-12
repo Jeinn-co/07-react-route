@@ -1,33 +1,54 @@
-import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
-import { Button, Card, Form, Input } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button, Card, Form, Input, message } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useUpdateUser, useUser } from "../../hooks/useUsers";
+import { useEffect } from "react";
 
 export default function UserEditPage() {
-  const user = useLoaderData();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const revalidator = useRevalidator();
+  const { data: user, isLoading, error } = useUser(id);
+  const updateUserMutation = useUpdateUser();
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
-    defaultValues: user,
     mode: "onChange",
   });
 
+  // 當 user 資料載入完成時，設定表單預設值
+  useEffect(() => {
+    if (user) {
+      reset(user);
+    }
+  }, [user, reset]);
+
   const onSubmit = async (data) => {
-    await fetch(`/api/users/${user.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    revalidator.revalidate();
-    navigate(-1);
+    try {
+      await updateUserMutation.mutateAsync({ id: user.id, ...data });
+      message.success("更新成功");
+      navigate(-1);
+    } catch (error) {
+      message.error("更新失敗");
+      console.error("Update error:", error);
+    }
   };
 
-  if (!user) return <div>User not found</div>;
+  if (isLoading) {
+    return <div>載入中...</div>;
+  }
+
+  if (error) {
+    return <div>載入失敗: {error.message}</div>;
+  }
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
 
   return (
     <Card
@@ -89,7 +110,12 @@ export default function UserEditPage() {
           />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" type="primary" style={{ marginRight: 8 }}>
+          <Button 
+            htmlType="submit" 
+            type="primary" 
+            style={{ marginRight: 8 }}
+            loading={updateUserMutation.isPending}
+          >
             儲存
           </Button>
           <Button onClick={() => navigate(-1)}>取消</Button>

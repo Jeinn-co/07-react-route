@@ -1,9 +1,19 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Card, Button, Descriptions } from "antd";
+import { useUser } from "../../hooks/useUsers";
 
 export default function UserProfile() {
-  const user = useLoaderData();
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { data: user, isLoading, error } = useUser(id);
+
+  if (isLoading) {
+    return <div>載入中...</div>;
+  }
+
+  if (error) {
+    return <div>載入失敗: {error.message}</div>;
+  }
 
   if (!user) {
     return <div>User not found</div>;

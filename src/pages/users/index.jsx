@@ -1,18 +1,19 @@
-import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Input, Popconfirm, message } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useState, useEffect } from "react";
+import { useUsers, useDeleteUser } from "../../hooks/useUsers";
 
 export default function UserList() {
-  const users = useLoaderData();
+  const { data: users = [], isLoading, error } = useUsers();
+  const deleteUserMutation = useDeleteUser();
   const safeUsers = Array.isArray(users) ? users : [];
   const [editingKey, setEditingKey] = useState(null);
   const navigate = useNavigate();
-  const revalidator = useRevalidator();
 
   useEffect(() => {
-    console.log('[UserList] Data from loader has changed:', users);
+    console.log('[UserList] Data from query has changed:', users);
   }, [users]);
 
   // 將 users 轉成物件陣列
@@ -45,13 +46,22 @@ export default function UserList() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`/api/users/${id}`, { method: "DELETE" });
+      console.log('[UserList] Deleting user with ID:', id);
+      await deleteUserMutation.mutateAsync(id);
       message.success("刪除成功");
-      revalidator.revalidate();
-    } catch {
+    } catch (error) {
       message.error("刪除失敗");
+      console.error("Delete error:", error);
     }
   };
+
+  if (isLoading) {
+    return <div>載入中...</div>;
+  }
+
+  if (error) {
+    return <div>載入失敗: {error.message}</div>;
+  }
 
   const columns = [
     {
@@ -101,7 +111,11 @@ export default function UserList() {
             okText="確定"
             cancelText="取消"
           >
-            <Button type="link" danger>
+            <Button 
+              type="link" 
+              danger
+              loading={deleteUserMutation.isPending}
+            >
               刪除
             </Button>
           </Popconfirm>
@@ -120,18 +134,19 @@ export default function UserList() {
           marginBottom: 16,
         }}
       >
-        <h2 style={{ margin: 0 }}>Users</h2>
+        <h2 style={{ margin: 0 }}>Users ({safeUsers.length})</h2>
         <Button type="primary" onClick={() => navigate("/users/new")}>
           新增使用者
         </Button>
       </div>
       <form>
         <Table
-      dataSource={safeUsers}
+          dataSource={safeUsers}
           columns={columns}
           rowKey="id"
           pagination={false}
-          />
+          loading={isLoading}
+        />
       </form>
       <DevTool control={control} />
     </>
