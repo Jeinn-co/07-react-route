@@ -14,10 +14,10 @@ const PageHome = lazy(() => import("./pages/home/index.jsx"));
 const PageDashboard = lazy(() => import("./pages/home/dashboard.jsx"));
 const UserList = lazy(() => import("./pages/users/index.jsx"));
 const UserProfile = lazy(() => import("./pages/users/user.jsx"));
-const PostList = lazy(() => import("./pages/posts/index.jsx"));
-const PostDetail = lazy(() => import("./pages/posts/post.jsx"));
 const UserEditPage = lazy(() => import("./pages/users/edit.jsx"));
 const UserCreatePage = lazy(() => import("./pages/users/create.jsx"));
+const PostList = lazy(() => import("./pages/posts/index.jsx"));
+const PostDetail = lazy(() => import("./pages/posts/post.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -56,6 +56,14 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: "new",
+            element: (
+              <SuspenseWrapper>
+                <UserCreatePage />
+              </SuspenseWrapper>
+            ),
+          },
+          {
             path: ":id",
             loader: userLoader,
             handle: { crumb: (data) => data?.name || "User Detail" },
@@ -72,14 +80,6 @@ const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <UserEditPage />
-              </SuspenseWrapper>
-            ),
-          },
-          {
-            path: "new",
-            element: (
-              <SuspenseWrapper>
-                <UserCreatePage />
               </SuspenseWrapper>
             ),
           },

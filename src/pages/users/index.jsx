@@ -1,14 +1,19 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { Table, Button, Input, Popconfirm, message } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function UserList() {
   const users = useLoaderData();
   const safeUsers = Array.isArray(users) ? users : [];
   const [editingKey, setEditingKey] = useState(null);
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
+
+  useEffect(() => {
+    console.log('[UserList] Data from loader has changed:', users);
+  }, [users]);
 
   // 將 users 轉成物件陣列
   const defaultValues = safeUsers.reduce((acc, user) => {
@@ -42,7 +47,7 @@ export default function UserList() {
     try {
       await fetch(`/api/users/${id}`, { method: "DELETE" });
       message.success("刪除成功");
-      window.location.reload();
+      revalidator.revalidate();
     } catch {
       message.error("刪除失敗");
     }
@@ -86,7 +91,7 @@ export default function UserList() {
         <>
           <Button
             type="link"
-            onClick={() => (window.location.href = `/users/${record.id}/edit`)}
+            onClick={() => navigate(`/users/${record.id}/edit`)}
           >
             編輯
           </Button>
@@ -122,11 +127,11 @@ export default function UserList() {
       </div>
       <form>
         <Table
-          dataSource={safeUsers}
+      dataSource={safeUsers}
           columns={columns}
           rowKey="id"
           pagination={false}
-        />
+          />
       </form>
       <DevTool control={control} />
     </>

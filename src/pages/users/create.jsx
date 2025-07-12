@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { Button, Card, Form, Input } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 export default function UserCreatePage() {
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
   const {
     control,
     handleSubmit,
@@ -26,6 +27,7 @@ export default function UserCreatePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    revalidator.revalidate();
     navigate("/users");
   };
 
@@ -96,3 +98,4 @@ export default function UserCreatePage() {
     </Card>
   );
 }
+ 

@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { Button, Card, Form, Input } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
@@ -6,6 +6,7 @@ import { DevTool } from "@hookform/devtools";
 export default function UserEditPage() {
   const user = useLoaderData();
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
 
   const {
     control,
@@ -22,6 +23,7 @@ export default function UserEditPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    revalidator.revalidate();
     navigate(-1);
   };
 
@@ -97,3 +99,4 @@ export default function UserEditPage() {
     </Card>
   );
 }
+ 

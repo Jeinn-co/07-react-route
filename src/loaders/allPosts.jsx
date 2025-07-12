@@ -1,13 +1,13 @@
 export async function allPostsLoader() {
   try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const response = await fetch("/api/posts", { cache: 'no-cache' });
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      console.error("Failed to fetch posts:", response.status, response.statusText);
+      return [];
     }
-    const posts = await response.json();
-    return posts;
+    return response.json();
   } catch (error) {
-    console.error("Failed to fetch posts:", error);
+    console.error("Error fetching posts:", error);
     return [];
   }
 }
