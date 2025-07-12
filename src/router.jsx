@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
+import PageLayout from "./layouts/PageLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
-import SuspenseWrapper from "./components/SuspenseWrapper.jsx";
 
 // Loaders
 import { usersLoader } from "./loaders/users.jsx";
@@ -22,91 +22,64 @@ const PostDetail = lazy(() => import("./pages/posts/post.jsx"));
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <PageLayout />,
     children: [
       {
-        index: true,
-        handle: { crumb: "Home" },
-        element: (
-          <SuspenseWrapper>
-            <PageHome />
-          </SuspenseWrapper>
-        ),
-      },
-      {
-        path: "dashboard",
-        handle: { crumb: "Dashboard" },
-        element: (
-          <SuspenseWrapper>
-            <PageDashboard />
-          </SuspenseWrapper>
-        ),
-      },
-      {
-        path: "users",
-        handle: { crumb: "Users" },
+        element: <MainLayout />,
         children: [
           {
             index: true,
-            loader: usersLoader,
-            element: (
-              <SuspenseWrapper>
-                <UserList />
-              </SuspenseWrapper>
-            ),
+            handle: { crumb: "Home" },
+            element: <PageHome />,
           },
           {
-            path: "new",
-            element: (
-              <SuspenseWrapper>
-                <UserCreatePage />
-              </SuspenseWrapper>
-            ),
+            path: "dashboard",
+            handle: { crumb: "Dashboard" },
+            element: <PageDashboard />,
           },
           {
-            path: ":id",
-            loader: userLoader,
-            handle: { crumb: (data) => data?.name || "User Detail" },
-            element: (
-              <SuspenseWrapper>
-                <UserProfile />
-              </SuspenseWrapper>
-            ),
+            path: "users",
+            handle: { crumb: "Users" },
+            children: [
+              {
+                index: true,
+                loader: usersLoader,
+                element: <UserList />,
+              },
+              {
+                path: "new",
+                element: <UserCreatePage />,
+              },
+              {
+                path: ":id",
+                loader: userLoader,
+                handle: { crumb: (data) => data?.name || "User Detail" },
+                element: <UserProfile />,
+              },
+              {
+                path: ":id/edit",
+                loader: userLoader,
+                handle: { crumb: (data) => `編輯 ${data?.name || ""}` },
+                element: <UserEditPage />,
+              },
+            ],
           },
           {
-            path: ":id/edit",
-            loader: userLoader,
-            handle: { crumb: (data) => `編輯 ${data?.name || ""}` },
-            element: (
-              <SuspenseWrapper>
-                <UserEditPage />
-              </SuspenseWrapper>
-            ),
-          },
-        ],
-      },
-      {
-        path: "posts",
-        handle: { crumb: "Posts" },
-        children: [
-          {
-            index: true,
-            loader: allPostsLoader,
-            element: (
-              <SuspenseWrapper>
-                <PostList />
-              </SuspenseWrapper>
-            ),
-          },
-          {
-            path: ":id",
-            loader: postLoader,
-            handle: { crumb: (data) => data?.title || "Post Detail" },
-            element: (
-              <SuspenseWrapper>
-                <PostDetail />
-              </SuspenseWrapper>
-            ),
+            path: "posts",
+            handle: { crumb: "Posts" },
+            children: [
+              {
+                index: true,
+                loader: allPostsLoader,
+                element: <PostList />,
+              },
+              {
+                path: ":id",
+                loader: postLoader,
+                handle: { crumb: (data) => data?.title || "Post Detail" },
+                element: <PostDetail />,
+              },
+            ],
           },
         ],
       },

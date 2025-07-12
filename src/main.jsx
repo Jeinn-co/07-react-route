@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import router from './router';
-import "antd/dist/reset.css"; // Import AntD's reset styles
-import "./index.css";
+import AppLayout from './layouts/AppLayout';
 
 async function cleanupAndStart() {
   // 在開發環境中啟用 Mock Service Worker
@@ -32,10 +29,10 @@ async function cleanupAndStart() {
   const rootElement = document.getElementById('root');
   if (rootElement) {
     ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-);
+      <React.StrictMode>
+        <AppLayout />
+      </React.StrictMode>,
+    );
   }
 }
 
