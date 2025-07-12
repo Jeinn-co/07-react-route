@@ -76,7 +76,13 @@ export default function UserList() {
             render={({ field }) => <Input {...field} />}
           />
         ) : (
-          text
+          <Button 
+            type="link" 
+            style={{ padding: 0, height: 'auto' }}
+            onClick={() => navigate(`/users/${record.id}`)}
+          >
+            {text}
+          </Button>
         ),
     },
     {
