@@ -41,7 +41,6 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                loader: usersLoader,
                 element: <UserList />,
               },
               {
@@ -50,14 +49,12 @@ const router = createBrowserRouter([
               },
               {
                 path: ":id",
-                loader: userLoader,
-                handle: { crumb: (data) => data?.name || "User Detail" },
+                handle: { crumb: "User Detail" },
                 element: <UserProfile />,
               },
               {
                 path: ":id/edit",
-                loader: userLoader,
-                handle: { crumb: (data) => `編輯 ${data?.name || ""}` },
+                handle: { crumb: "Edit User" },
                 element: <UserEditPage />,
               },
             ],

@@ -13,6 +13,7 @@ import {
   ReadOutlined,
   DashboardOutlined,
 } from "@ant-design/icons";
+import SuspenseWrapper from "../components/SuspenseWrapper.jsx";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -87,7 +88,9 @@ export default function MainLayout() {
               borderRadius: borderRadiusLG,
             }}
           >
-            <Outlet />
+            <SuspenseWrapper>
+              <Outlet />
+            </SuspenseWrapper>
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
