@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { Table, Button, Typography, Input } from "antd";
+import { useState, useMemo } from "react";
+import { Table, Input, Button, Typography } from "antd";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
@@ -12,7 +12,7 @@ export default function PostList() {
 
   const safePosts = useMemo(
     () => (Array.isArray(posts) ? posts.map((p) => ({ ...p, key: p.id })) : []),
-    [posts],
+    [posts]
   );
 
   const filteredPosts = useMemo(() => {
@@ -22,7 +22,7 @@ export default function PostList() {
     return safePosts.filter(
       (post) =>
         post.title.toLowerCase().includes(searchText.toLowerCase()) ||
-        String(post.id).includes(searchText),
+        String(post.id).includes(searchText)
     );
   }, [safePosts, searchText]);
 
@@ -52,7 +52,7 @@ export default function PostList() {
 
   return (
     <div>
-      <Title level={4}>All Posts</Title>
+      <Title level={2}>All Posts</Title>
       <Search
         placeholder="Filter by ID or Title"
         onChange={(e) => setSearchText(e.target.value)}
@@ -60,16 +60,15 @@ export default function PostList() {
         allowClear
       />
       <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>
-        總共有 {safePosts.length} 筆貼文，目前顯示 {filteredPosts.length} 筆。
+        Total {safePosts.length} posts, showing {filteredPosts.length}.
       </Text>
       <Table
         columns={columns}
         dataSource={filteredPosts}
         pagination={{
           defaultPageSize: 10,
-          total: filteredPosts.length,
           showSizeChanger: true,
-          pageSizeOptions: ["10", "20", "50", "100"],
+          pageSizeOptions: ["10", "20", "50"],
           showTotal: (total, range) =>
             `${range[0]}-${range[1]} of ${total} items`,
         }}
