@@ -1,14 +1,20 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { Table, Input, Button, Typography } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { postApi } from "../../services/api";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
 
 export default function PostList() {
-  const posts = useLoaderData();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
+  
+  const { data: posts = [], isLoading, error } = useQuery({
+    queryKey: ['posts'],
+    queryFn: postApi.getPosts,
+  });
 
   const safePosts = useMemo(
     () => (Array.isArray(posts) ? posts.map((p) => ({ ...p, key: p.id })) : []),
@@ -25,6 +31,14 @@ export default function PostList() {
         String(post.id).includes(searchText)
     );
   }, [safePosts, searchText]);
+
+  if (isLoading) {
+    return <div>載入中...</div>;
+  }
+
+  if (error) {
+    return <div>載入失敗: {error.message}</div>;
+  }
 
   const columns = [
     {
@@ -73,6 +87,7 @@ export default function PostList() {
             `${range[0]}-${range[1]} of ${total} items`,
         }}
         bordered
+        loading={isLoading}
       />
     </div>
   );

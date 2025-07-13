@@ -4,7 +4,6 @@ import PageLayout from "./layouts/PageLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 
 // Loaders
-import { allPostsLoader } from "./loaders/allPosts.jsx";
 import { postLoader } from "./loaders/post.jsx";
 
 // Page Components (Lazy Loaded)
@@ -65,7 +64,6 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                loader: allPostsLoader,
                 element: <PostList />,
               },
               {

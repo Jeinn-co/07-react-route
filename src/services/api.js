@@ -59,4 +59,26 @@ export const userApi = {
     // DELETE 請求通常不回傳 JSON，所以不需要解析回應
     return { success: true };
   },
+};
+
+export const postApi = {
+  // 取得所有文章
+  getPosts: async () => {
+    const response = await fetch(`${API_BASE}/posts`, { 
+      cache: 'no-cache' 
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch posts');
+    }
+    return response.json();
+  },
+
+  // 取得單一文章
+  getPost: async (id) => {
+    const response = await fetch(`${API_BASE}/posts/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch post');
+    }
+    return response.json();
+  },
 }; 
